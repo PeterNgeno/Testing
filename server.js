@@ -9,40 +9,44 @@ const PORT = process.env.PORT || 5000;
 // Middleware
 app.use(bodyParser.json());
 
-// Endpoint to initiate the STK Push
+// STK Push API - Initiating payment
 app.post('/api/payments/initiate', async (req, res) => {
-    const { phoneNumber } = req.body;
-    const amount = 1; // Amount to pay (Ksh 1)
+    const { phoneNumber } = req.body; // User phone number (e.g., +2547XXXXXXXXX)
+    const amount = 1;  // Payment amount (Ksh 1)
+    
+    // Retrieve your credentials from the environment variables
     const consumerKey = process.env.CONSUMER_KEY;
     const consumerSecret = process.env.CONSUMER_SECRET;
     const shortcode = process.env.LIPA_NA_MPESA_SHORTCODE;
     const lipaNaMpesaOnlineShortcodeKey = process.env.LIPA_NA_MPESA_ONLINE_SHORTCODE_KEY;
-
+    
+    // Authenticate with Safaricom API to get an access token
     const auth = Buffer.from(`${consumerKey}:${consumerSecret}`).toString('base64');
     const headers = {
         'Authorization': `Basic ${auth}`,
         'Content-Type': 'application/json'
     };
 
-    // Get access token from Safaricom API
     try {
+        // Step 1: Get Access Token
         const tokenResponse = await axios.get('https://api.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials', { headers });
         const accessToken = tokenResponse.data.access_token;
-
+        
+        // Step 2: Prepare the STK Push payload
         const payload = {
             BusinessShortcode: shortcode,
             LipaNaMpesaOnlineShortcodeKey: lipaNaMpesaOnlineShortcodeKey,
-            PhoneNumber: phoneNumber,
-            AccountReference: 'SANGPOINT',
-            TransactionDesc: 'Payment for quiz section',
-            Amount: amount,
-            PartyA: phoneNumber,
-            PartyB: shortcode,
-            Shortcode: shortcode,
-            LipaNaMpesaShortcodeKey: lipaNaMpesaOnlineShortcodeKey
+            PhoneNumber: phoneNumber, // The phone number to send the STK Push request
+            AccountReference: 'SANGPOINT',  // Reference for the transaction
+            TransactionDesc: 'Payment for quiz section', // Transaction description
+            Amount: amount, // Payment amount
+            PartyA: phoneNumber, // User's phone number
+            PartyB: shortcode, // Shortcode of your business
+            Shortcode: shortcode, // Shortcode of your business
+            LipaNaMpesaShortcodeKey: lipaNaMpesaOnlineShortcodeKey // Passkey for the business
         };
 
-        // STK Push request to Safaricom API
+        // Step 3: Initiate the STK Push request
         const stkPushResponse = await axios.post('https://api.safaricom.co.ke/mpesa/stkpush/v1/processrequest', payload, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
@@ -51,13 +55,13 @@ app.post('/api/payments/initiate', async (req, res) => {
         });
 
         if (stkPushResponse.status === 200) {
-            res.json({ success: true, message: 'Payment initiated successfully. Please check your phone for payment confirmation.' });
+            res.json({ success: true, message: 'Payment initiated. Please check your phone for payment confirmation.' });
         } else {
             res.json({ success: false, message: 'Payment initiation failed.' });
         }
     } catch (error) {
         console.error('Error initiating payment:', error);
-        res.json({ success: false, message: 'Payment failed, please try again.' });
+        res.json({ success: false, message: 'Payment failed. Please try again later.' });
     }
 });
 
@@ -78,7 +82,7 @@ app.post('/api/payments/callback', (req, res) => {
     res.status(200).json({ message: 'Callback received and processed' });
 });
 
-// Start the server
+// Start server
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
