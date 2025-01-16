@@ -41,14 +41,13 @@
         async function initiatePayment() {
             const phoneNumber = document.getElementById('phoneNumber').value.trim();
 
-            // Validate phone number
             const phonePattern = /^\+254\d{9}$/;
             if (!phonePattern.test(phoneNumber)) {
                 alert('Invalid phone number format. Ensure it starts with +254 and followed by 9 digits.');
                 return;
             }
 
-            const response = await fetch('https://quiz-perontips.vercel.app/api/payments/initiate', {
+            const response = await fetch('/api/payments/initiate', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ phoneNumber })
