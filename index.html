@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mpesa Payment</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .form-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        input, button {
+            padding: 10px;
+            font-size: 16px;
+            width: 300px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h2>Mpesa Payment</h2>
+    <div class="form-container">
+        <input type="text" id="phoneNumber" placeholder="Enter phone number (e.g., +2547xxxxxxxx)" required>
+        <button onclick="initiatePayment()">Pay Ksh 1</button>
+    </div>
+
+    <script>
+        async function initiatePayment() {
+            const phoneNumber = document.getElementById('phoneNumber').value.trim();
+
+            // Validate phone number
+            const phonePattern = /^\+254\d{9}$/;
+            if (!phonePattern.test(phoneNumber)) {
+                alert('Invalid phone number format. Ensure it starts with +254 and followed by 9 digits.');
+                return;
+            }
+
+            const response = await fetch('https://quiz-perontips.vercel.app/api/payments/initiate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ phoneNumber })
+            });
+
+            const data = await response.json();
+            if (data.success) {
+                alert(data.message);
+            } else {
+                alert(data.message);
+            }
+        }
+    </script>
+</body>
+</html>
