@@ -4,11 +4,12 @@ const bodyParser = require('body-parser');
 require('dotenv').config();
 
 const app = express();
+const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(bodyParser.json());
 
-// Payment initiation route
+// Endpoint to initiate the STK Push
 app.post('/api/payments/initiate', async (req, res) => {
     const { phoneNumber } = req.body;
     const amount = 1; // Amount to pay (Ksh 1)
@@ -23,7 +24,7 @@ app.post('/api/payments/initiate', async (req, res) => {
         'Content-Type': 'application/json'
     };
 
-    // Get access token
+    // Get access token from Safaricom API
     try {
         const tokenResponse = await axios.get('https://api.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials', { headers });
         const accessToken = tokenResponse.data.access_token;
@@ -38,9 +39,10 @@ app.post('/api/payments/initiate', async (req, res) => {
             PartyA: phoneNumber,
             PartyB: shortcode,
             Shortcode: shortcode,
+            LipaNaMpesaShortcodeKey: lipaNaMpesaOnlineShortcodeKey
         };
 
-        // Send the STK Push request
+        // STK Push request to Safaricom API
         const stkPushResponse = await axios.post('https://api.safaricom.co.ke/mpesa/stkpush/v1/processrequest', payload, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
@@ -49,7 +51,7 @@ app.post('/api/payments/initiate', async (req, res) => {
         });
 
         if (stkPushResponse.status === 200) {
-            res.json({ success: true, message: 'Payment initiated successfully, please check your phone.' });
+            res.json({ success: true, message: 'Payment initiated successfully. Please check your phone for payment confirmation.' });
         } else {
             res.json({ success: false, message: 'Payment initiation failed.' });
         }
@@ -59,7 +61,7 @@ app.post('/api/payments/initiate', async (req, res) => {
     }
 });
 
-// Callback route for handling payment responses
+// Callback route to receive payment status
 app.post('/api/payments/callback', (req, res) => {
     const { Body } = req.body;
 
@@ -76,8 +78,7 @@ app.post('/api/payments/callback', (req, res) => {
     res.status(200).json({ message: 'Callback received and processed' });
 });
 
-// Start server
-const PORT = process.env.PORT || 5000;
+// Start the server
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
