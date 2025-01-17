@@ -12,7 +12,7 @@ app.use(express.static("public")); // Serve static files like index.html
 
 // Daraja API sandbox credentials
 const consumerKey = "guO0rm165Vt8gARvEG4a7GTwy0ATHc1RxG6TSLgyAsh5NeZF"; // Replace with your sandbox consumer key
-const consumerSecret = "your_sandbox_consumer_secret"; // Replace with your sandbox consumer secret
+const consumerSecret = "xz8evol1G1OdUzHGTve4hPBIUQASJK1hMy1PdPWf4ozgAKgYRLPgtU4fAVZl47Gq"; // Replace with your sandbox consumer secret
 const shortcode = "174379"; // Default Daraja sandbox shortcode
 const passkey =
   "bfb279f9aa9bdbcf158e97dd71a467cd2c2f86f45d254c546e8f505de918c260"; // Default Daraja sandbox passkey
