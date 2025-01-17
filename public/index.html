@@ -1,65 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mpesa Payment</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-        .form-container {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        input, button {
-            padding: 10px;
-            font-size: 16px;
-            width: 300px;
-        }
-        button {
-            background-color: #007bff;
-            color: white;
-            cursor: pointer;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>STK Push Test</title>
 </head>
 <body>
-    <h2>Mpesa Payment</h2>
-    <div class="form-container">
-        <input type="text" id="phoneNumber" placeholder="Enter phone number (e.g., +2547xxxxxxxx)" required>
-        <button onclick="initiatePayment()">Pay Ksh 1</button>
-    </div>
+  <h1>STK Push Test</h1>
+  <form id="stkPushForm">
+    <label for="phoneNumber">Phone Number (+254...):</label>
+    <input type="text" id="phoneNumber" name="phoneNumber" required>
+    <label for="amount">Amount (Ksh):</label>
+    <input type="number" id="amount" name="amount" required>
+    <button type="submit">Pay Now</button>
+  </form>
 
-    <script>
-        async function initiatePayment() {
-            const phoneNumber = document.getElementById('phoneNumber').value.trim();
+  <div id="response"></div>
 
-            const phonePattern = /^\+254\d{9}$/;
-            if (!phonePattern.test(phoneNumber)) {
-                alert('Invalid phone number format. Ensure it starts with +254 and followed by 9 digits.');
-                return;
-            }
+  <script>
+    const form = document.getElementById("stkPushForm");
+    const responseDiv = document.getElementById("response");
 
-            const response = await fetch('/api/payments/initiate', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ phoneNumber })
-            });
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const phoneNumber = document.getElementById("phoneNumber").value.trim();
+      const amount = document.getElementById("amount").value.trim();
 
-            const data = await response.json();
-            if (data.success) {
-                alert(data.message);
-            } else {
-                alert(data.message);
-            }
-        }
-    </script>
+      if (!phoneNumber.startsWith("+254") || phoneNumber.length !== 13) {
+        alert("Invalid phone number format. Ensure it starts with +254 and has 12 digits.");
+        return;
+      }
+
+      try {
+        const response = await fetch("/api/stkpush", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ phoneNumber, amount }),
+        });
+
+        const data = await response.json();
+        responseDiv.textContent = data.message;
+      } catch (error) {
+        console.error("Error:", error);
+        responseDiv.textContent = "Failed to process payment. Check console for details.";
+      }
+    });
+  </script>
 </body>
 </html>
