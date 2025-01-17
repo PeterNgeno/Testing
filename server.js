@@ -11,8 +11,8 @@ app.use(bodyParser.json());
 app.use(express.static("public")); // Serve static files like index.html
 
 // Daraja API credentials (use environment variables for security)
-const consumerKey = "F9vcsSTCL9UnAurbhDyeFFtJpFPLmumfpsNEfx2cuBZajfu4";
-const consumerSecret = "TFYNehMxAjfvmFbHmnDGV2EuKhplVWKGiqAP5bFc1QRgrzZC9BUoZMX2HH2SyNhE";
+const consumerKey = "F9vcsSTCL9UnAurbhDyeFFtJpFPLmumfpsNEfx2cuBZajfI6";
+const consumerSecret = "TFYNehMxAjfvmFbHmnDGV2EuKhplVWKGiqAP5bFc1QRgrzZC9BUoZMX2HH2SyNCU";
 const shortcode = "5482174";
 const passkey = "b66e0843a832196d3b5afe708a4c6bb7b00b23651f2da65a0e63b75f323tre1";
 const callbackURL = "https://yourdomain.com/callback"; // Replace with your callback URL
