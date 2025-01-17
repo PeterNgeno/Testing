@@ -80,7 +80,7 @@ app.post("/api/stkpush", async (req, res) => {
     });
   } catch (error) {
     console.error("Error initiating STK Push:", error.response ? error.response.data : error.message);
-    res.status(500).json({ success: false, message: "STK Push failed.", error: error.response.data });
+    res.status(500).json({ success: false, message: "STK Push failed.", error: error.response?.data });
   }
 });
 
@@ -90,7 +90,7 @@ app.post("/callback", (req, res) => {
     const callbackData = req.body;
     console.log("Callback Data:", JSON.stringify(callbackData));
 
-    // Process the callback data as required
+    // Process the callback data as required (e.g., save payment status to DB)
     res.status(200).send("Callback received successfully");
   } catch (error) {
     console.error("Error handling callback:", error.message);
@@ -107,22 +107,12 @@ app.get("/callback", (req, res) => {
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 });
+
 (async () => {
   try {
     const token = await generateToken();
     console.log("Generated Token:", token);
   } catch (err) {
-    console.error("Token Generation Error:", err.response.data);
+    console.error("Token Generation Error:", err.response?.data);
   }
 })();
-try {
-    // Your existing code here...
-} catch (error) {
-    console.error("STK Push Error Response:", error.response?.data || error.message);
-    res.status(500).json({ 
-        success: false, 
-        message: error.response?.data?.errorMessage || "STK Push failed.", 
-        error: error.response?.data 
-    });
-}
-console.error("Error initiating STK Push:", error.response?.data || error.message);
