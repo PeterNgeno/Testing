@@ -10,11 +10,11 @@ const port = 3000;
 app.use(bodyParser.json());
 app.use(express.static("public")); // Serve static files like index.html
 
-// Sandbox Daraja API credentials
+// Daraja API sandbox credentials
 const consumerKey = "guO0rm165Vt8gARvEG4a7GTwy0ATHc1RxG6TSLgyAsh5NeZF";
 const consumerSecret = "xz8evol1G1OdUzHGTve4hPBIUQASJK1hMy1PdPWf4ozgAKgYRLPgtU4fAVZl47Gq";
-const shortcode = "174379"; // Default Sandbox shortcode
-const passkey = "bfb279f9aa9bdbcf158e97dd71a467cd2c2f86f45d254c546e8f505de918c260"; // Sandbox passkey
+const shortcode = "174379"; // Default M-Pesa sandbox shortcode
+const passkey = "bfb279f9aa9bdbcf158e97dd71a467cd2c2f86f45d254c546e8f505de918c260";
 const callbackURL = "https://testing-gold-two.vercel.app/callback"; // Your callback URL
 
 // Generate Safaricom API token
@@ -33,7 +33,14 @@ const generateToken = async () => {
 
 // Initiate STK Push
 app.post("/api/stkpush", async (req, res) => {
-  const { phoneNumber, amount } = req.body;
+  let { phoneNumber, amount } = req.body;
+
+  // Ensure phone number is in the correct format
+  if (phoneNumber.startsWith("+254")) {
+    phoneNumber = phoneNumber.replace("+", "");
+  } else if (phoneNumber.startsWith("07")) {
+    phoneNumber = "254" + phoneNumber.slice(1);
+  }
 
   try {
     const token = await generateToken();
@@ -73,7 +80,7 @@ app.post("/api/stkpush", async (req, res) => {
     });
   } catch (error) {
     console.error("Error initiating STK Push:", error.response ? error.response.data : error.message);
-    res.status(500).json({ success: false, message: "STK Push failed.", error: error.response?.data });
+    res.status(500).json({ success: false, message: "STK Push failed.", error: error.response.data });
   }
 });
 
@@ -105,6 +112,6 @@ app.listen(port, () => {
     const token = await generateToken();
     console.log("Generated Token:", token);
   } catch (err) {
-    console.error("Token Generation Error:", err.response?.data);
+    console.error("Token Generation Error:", err.response.data);
   }
 })();
