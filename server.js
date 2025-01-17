@@ -81,3 +81,11 @@ app.post("/api/stkpush", async (req, res) => {
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 });
+(async () => {
+  try {
+    const token = await generateToken();
+    console.log("Generated Token:", token);
+  } catch (err) {
+    console.error("Token Generation Error:", err.response.data);
+  }
+})();
