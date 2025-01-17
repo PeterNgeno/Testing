@@ -11,7 +11,7 @@ app.use(bodyParser.json());
 app.use(express.static("public")); // Serve static files like index.html
 
 // Daraja API credentials
-const consumerKey = "F9vcsSTCL9UnAurbhDyeFFtJpFPLmumfpsNEfx2cuBZajfI6";
+const consumerKey = "guO0rm165Vt8gARvEG4a7GTwy0ATHc1RxG6TSLgyAsh5NeZF";
 const consumerSecret = "xz8evol1G1OdUzHGTve4hPBIUQASJK1hMy1PdPWf4ozgAKgYRLPgtU4fAVZl47Gq";
 const shortcode = "5482174";
 const passkey = "b66e0843a832196d3b5afe708a4c6bb7b00b23651f2da65a0e63b75f3bb0c65a";
