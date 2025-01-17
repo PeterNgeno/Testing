@@ -10,12 +10,12 @@ const port = 3000;
 app.use(bodyParser.json());
 app.use(express.static("public")); // Serve static files like index.html
 
-// Daraja API credentials (use environment variables for security)
+// Daraja API credentials
 const consumerKey = "F9vcsSTCL9UnAurbhDyeFFtJpFPLmumfpsNEfx2cuBZajfI6";
 const consumerSecret = "TFYNehMxAjfvmFbHmnDGV2EuKhplVWKGiqAP5bFc1QRgrzZC9BUoZMX2HH2SyNCU";
 const shortcode = "5482174";
 const passkey = "b66e0843a832196d3b5afe708a4c6bb7b00b23651f2da65a0e63b75f3bb0c65a";
-const callbackURL = "https://testing-gold-two.vercel.app/callback"; // Ensure the callback URL matches this route
+const callbackURL = "https://testing-gold-two.vercel.app/callback"; // Your domain's callback URL
 
 // Generate Safaricom API token
 const generateToken = async () => {
@@ -53,7 +53,7 @@ app.post("/api/stkpush", async (req, res) => {
       PartyA: phoneNumber,
       PartyB: shortcode,
       PhoneNumber: phoneNumber,
-      CallBackURL: callbackURL, // Safaricom will call this URL with transaction data
+      CallBackURL: callbackURL,
       AccountReference: "STK Push Test",
       TransactionDesc: "Test Payment",
     };
@@ -72,54 +72,39 @@ app.post("/api/stkpush", async (req, res) => {
       data: response.data,
     });
   } catch (error) {
-    console.error("Error initiating STK Push:", error.response?.data || error.message);
-    res.status(500).json({ success: false, message: "STK Push failed.", error: error.response?.data || error.message });
+    console.error("Error initiating STK Push:", error.response ? error.response.data : error.message);
+    res.status(500).json({ success: false, message: "STK Push failed.", error: error.response.data });
   }
 });
 
-// Safaricom Callback Route
+// Handle Callback from Safaricom
 app.post("/callback", (req, res) => {
-  // Safaricom will send transaction details in the body of the request
-  console.log("Callback received:", req.body);
+  try {
+    const callbackData = req.body;
+    console.log("Callback Data:", JSON.stringify(callbackData));
 
-  // Process the callback data (e.g., save to database, validate payment, etc.)
-  const { Body } = req.body;
-
-  if (Body?.stkCallback) {
-    const {
-      MerchantRequestID,
-      CheckoutRequestID,
-      ResultCode,
-      ResultDesc,
-      CallbackMetadata,
-    } = Body.stkCallback;
-
-    // Example: Log metadata
-    console.log("Transaction Metadata:", CallbackMetadata);
-
-    // Handle success or failure
-    if (ResultCode === 0) {
-      console.log("Transaction successful:", CallbackMetadata);
-    } else {
-      console.log("Transaction failed:", ResultDesc);
-    }
+    // Process the callback data as required
+    res.status(200).send("Callback received successfully");
+  } catch (error) {
+    console.error("Error handling callback:", error.message);
+    res.status(500).send("Error handling callback");
   }
+});
 
-  // Respond to Safaricom to acknowledge receipt
-  res.status(200).send("Callback received successfully");
+// Test Callback URL
+app.get("/callback", (req, res) => {
+  res.send("Callback URL is reachable!");
 });
 
 // Start server
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 });
-
-// Generate and log the Safaricom API token
 (async () => {
   try {
     const token = await generateToken();
     console.log("Generated Token:", token);
   } catch (err) {
-    console.error("Token Generation Error:", err.response?.data || err.message);
+    console.error("Token Generation Error:", err.response.data);
   }
 })();
