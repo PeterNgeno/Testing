@@ -10,19 +10,20 @@ const port = 3000;
 app.use(bodyParser.json());
 app.use(express.static("public")); // Serve static files like index.html
 
-// Daraja API credentials
-const consumerKey = "guO0rm165Vt8gARvEG4a7GTwy0ATHc1RxG6TSLgyAsh5NeZF";
-const consumerSecret = "xz8evol1G1OdUzHGTve4hPBIUQASJK1hMy1PdPWf4ozgAKgYRLPgtU4fAVZl47Gq";
-const shortcode = "174379";
-const passkey = "bfb279f9aa9bdbcf158e97dd71a467cd2c2f86f45d254c546e8f505de918c260";
-const callbackURL = "https://testing-gold-two.vercel.app/callback"; // Your domain's callback URL
+// Daraja API sandbox credentials
+const consumerKey = "your_sandbox_consumer_key"; // Replace with your sandbox consumer key
+const consumerSecret = "your_sandbox_consumer_secret"; // Replace with your sandbox consumer secret
+const shortcode = "174379"; // Default Daraja sandbox shortcode
+const passkey =
+  "bfb279f9aa9bdbcf158e97dd71a467cd2c2f86f45d254c546e8f505de918c260"; // Default Daraja sandbox passkey
+const callbackURL = "https://testing-gold-two.vercel.app/callback"; // Ensure this URL is accessible
 
 // Generate Safaricom API token
 const generateToken = async () => {
   const auth = Buffer.from(`${consumerKey}:${consumerSecret}`).toString("base64");
 
   const response = await axios.get(
-    "https://api.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials",
+    "https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials", // Sandbox endpoint
     {
       headers: { Authorization: `Basic ${auth}` },
     }
@@ -54,12 +55,12 @@ app.post("/api/stkpush", async (req, res) => {
       PartyB: shortcode,
       PhoneNumber: phoneNumber,
       CallBackURL: callbackURL,
-      AccountReference: "STK Push Test",
-      TransactionDesc: "Test Payment",
+      AccountReference: "TestAccount",
+      TransactionDesc: "TestTransaction",
     };
 
     const response = await axios.post(
-      "https://api.safaricom.co.ke/mpesa/stkpush/v1/processrequest",
+      "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest", // Sandbox endpoint
       payload,
       {
         headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
@@ -73,7 +74,11 @@ app.post("/api/stkpush", async (req, res) => {
     });
   } catch (error) {
     console.error("Error initiating STK Push:", error.response ? error.response.data : error.message);
-    res.status(500).json({ success: false, message: "STK Push failed.", error: error.response.data });
+    res.status(500).json({
+      success: false,
+      message: "STK Push failed.",
+      error: error.response ? error.response.data : error.message,
+    });
   }
 });
 
@@ -105,6 +110,6 @@ app.listen(port, () => {
     const token = await generateToken();
     console.log("Generated Token:", token);
   } catch (err) {
-    console.error("Token Generation Error:", err.response.data);
+    console.error("Token Generation Error:", err.response ? err.response.data : err.message);
   }
 })();
