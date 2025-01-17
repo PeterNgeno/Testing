@@ -3,33 +3,56 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Daraja STK Push</title>
-  <link rel="stylesheet" href="styles.css"> <!-- Optional: Include styles -->
+  <title>STK Push Test</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      padding: 20px;
+    }
+    form {
+      margin-bottom: 20px;
+    }
+    input, button {
+      display: block;
+      margin: 10px 0;
+      padding: 10px;
+      font-size: 16px;
+    }
+    #responseMessage {
+      margin-top: 20px;
+      font-size: 18px;
+      color: green;
+    }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Daraja STK Push Integration</h1>
-    <form id="stkPushForm">
-      <div class="form-group">
-        <label for="phoneNumber">Phone Number (Format: 2547XXXXXXXX)</label>
-        <input type="text" id="phoneNumber" name="phoneNumber" required>
-      </div>
-      <div class="form-group">
-        <label for="amount">Amount</label>
-        <input type="number" id="amount" name="amount" required>
-      </div>
-      <button type="submit">Send STK Push</button>
-    </form>
-    <div id="responseMessage"></div>
-  </div>
+  <h1>STK Push Test</h1>
+  <form id="stkPushForm">
+    <label for="phoneNumber">Phone Number:</label>
+    <input type="text" id="phoneNumber" placeholder="Enter phone number" required />
+
+    <label for="amount">Amount:</label>
+    <input type="number" id="amount" placeholder="Enter amount" required />
+
+    <button type="submit">Send STK Push</button>
+  </form>
+
+  <div id="responseMessage"></div>
 
   <script>
-    // Handle STK Push Form Submission
     document.getElementById('stkPushForm').addEventListener('submit', async function (event) {
       event.preventDefault();
-      
-      const phoneNumber = document.getElementById('phoneNumber').value;
+
+      let phoneNumber = document.getElementById('phoneNumber').value;
       const amount = document.getElementById('amount').value;
+
+      // Ensure the phone number is in the correct format
+      if (phoneNumber.startsWith("+254")) {
+        phoneNumber = phoneNumber.replace("+", "");
+      } else if (phoneNumber.startsWith("07")) {
+        phoneNumber = "254" + phoneNumber.slice(1);
+      }
 
       try {
         const response = await fetch('/api/stkpush', {
