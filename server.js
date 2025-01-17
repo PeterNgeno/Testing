@@ -115,4 +115,14 @@ app.listen(port, () => {
     console.error("Token Generation Error:", err.response.data);
   }
 })();
+try {
+    // Your existing code here...
+} catch (error) {
+    console.error("STK Push Error Response:", error.response?.data || error.message);
+    res.status(500).json({ 
+        success: false, 
+        message: error.response?.data?.errorMessage || "STK Push failed.", 
+        error: error.response?.data 
+    });
+}
 console.error("Error initiating STK Push:", error.response?.data || error.message);
