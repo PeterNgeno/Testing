@@ -3,46 +3,49 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>STK Push Test</title>
+  <title>Daraja STK Push</title>
+  <link rel="stylesheet" href="styles.css"> <!-- Optional: Include styles -->
 </head>
 <body>
-  <h1>STK Push Test</h1>
-  <form id="stkPushForm">
-    <label for="phoneNumber">Phone Number (+254...):</label>
-    <input type="text" id="phoneNumber" name="phoneNumber" required>
-    <label for="amount">Amount (Ksh):</label>
-    <input type="number" id="amount" name="amount" required>
-    <button type="submit">Pay Now</button>
-  </form>
-
-  <div id="response"></div>
+  <div class="container">
+    <h1>Daraja STK Push Integration</h1>
+    <form id="stkPushForm">
+      <div class="form-group">
+        <label for="phoneNumber">Phone Number (Format: 2547XXXXXXXX)</label>
+        <input type="text" id="phoneNumber" name="phoneNumber" required>
+      </div>
+      <div class="form-group">
+        <label for="amount">Amount</label>
+        <input type="number" id="amount" name="amount" required>
+      </div>
+      <button type="submit">Send STK Push</button>
+    </form>
+    <div id="responseMessage"></div>
+  </div>
 
   <script>
-    const form = document.getElementById("stkPushForm");
-    const responseDiv = document.getElementById("response");
-
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const phoneNumber = document.getElementById("phoneNumber").value.trim();
-      const amount = document.getElementById("amount").value.trim();
-
-      if (!phoneNumber.startsWith("+254") || phoneNumber.length !== 13) {
-        alert("Invalid phone number format. Ensure it starts with +254 and has 12 digits.");
-        return;
-      }
+    // Handle STK Push Form Submission
+    document.getElementById('stkPushForm').addEventListener('submit', async function (event) {
+      event.preventDefault();
+      
+      const phoneNumber = document.getElementById('phoneNumber').value;
+      const amount = document.getElementById('amount').value;
 
       try {
-        const response = await fetch("/api/stkpush", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
+        const response = await fetch('/api/stkpush', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
           body: JSON.stringify({ phoneNumber, amount }),
         });
 
         const data = await response.json();
-        responseDiv.textContent = data.message;
+        document.getElementById('responseMessage').innerText = data.message || 'Request completed.';
+        console.log('Response:', data);
       } catch (error) {
-        console.error("Error:", error);
-        responseDiv.textContent = "Failed to process payment. Check console for details.";
+        console.error('Error:', error);
+        document.getElementById('responseMessage').innerText = 'Error initiating STK Push.';
       }
     });
   </script>
