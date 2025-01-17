@@ -1,77 +1,83 @@
-const express = require('express');
-const axios = require('axios');
-const bodyParser = require('body-parser');
-require('dotenv').config();
+const express = require("express");
+const axios = require("axios");
+const bodyParser = require("body-parser");
+require("dotenv").config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const port = 3000;
 
+// Middleware
 app.use(bodyParser.json());
+app.use(express.static("public")); // Serve static files like index.html
 
-app.post('/api/payments/initiate', async (req, res) => {
-    const { phoneNumber } = req.body; // User phone number (e.g., +2547XXXXXXXXX)
-    const amount = 1;  // Payment amount (Ksh 1)
+// Daraja API credentials (use environment variables for security)
+const consumerKey = "F9vcsSTCL9UnAurbhDyeFFtJpFPLmumfpsNEfx2cuBZajfu4";
+const consumerSecret = "TFYNehMxAjfvmFbHmnDGV2EuKhplVWKGiqAP5bFc1QRgrzZC9BUoZMX2HH2SyNhE";
+const shortcode = "5482174";
+const passkey = "b66e0843a832196d3b5afe708a4c6bb7b00b23651f2da65a0e63b75f323tre1";
+const callbackURL = "https://yourdomain.com/callback"; // Replace with your callback URL
 
-    const consumerKey = process.env.CONSUMER_KEY;
-    const consumerSecret = process.env.CONSUMER_SECRET;
-    const shortcode = process.env.LIPA_NA_MPESA_SHORTCODE;
-    const lipaNaMpesaOnlineShortcodeKey = process.env.LIPA_NA_MPESA_ONLINE_SHORTCODE_KEY;
+// Generate Safaricom API token
+const generateToken = async () => {
+  const auth = Buffer.from(`${consumerKey}:${consumerSecret}`).toString("base64");
 
-    const auth = Buffer.from(`${consumerKey}:${consumerSecret}`).toString('base64');
-    const headers = {
-        'Authorization': `Basic ${auth}`,
-        'Content-Type': 'application/json'
+  const response = await axios.get(
+    "https://api.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials",
+    {
+      headers: { Authorization: `Basic ${auth}` },
+    }
+  );
+
+  return response.data.access_token;
+};
+
+// Initiate STK Push
+app.post("/api/stkpush", async (req, res) => {
+  const { phoneNumber, amount } = req.body;
+
+  try {
+    const token = await generateToken();
+
+    const timestamp = new Date()
+      .toISOString()
+      .replace(/[-T:.Z]/g, "")
+      .slice(0, 14);
+    const password = Buffer.from(`${shortcode}${passkey}${timestamp}`).toString("base64");
+
+    const payload = {
+      BusinessShortCode: shortcode,
+      Password: password,
+      Timestamp: timestamp,
+      TransactionType: "CustomerPayBillOnline",
+      Amount: amount,
+      PartyA: phoneNumber,
+      PartyB: shortcode,
+      PhoneNumber: phoneNumber,
+      CallBackURL: callbackURL,
+      AccountReference: "STK Push Test",
+      TransactionDesc: "Test Payment",
     };
 
-    try {
-        const tokenResponse = await axios.get('https://api.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials', { headers });
-        const accessToken = tokenResponse.data.access_token;
+    const response = await axios.post(
+      "https://api.safaricom.co.ke/mpesa/stkpush/v1/processrequest",
+      payload,
+      {
+        headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+      }
+    );
 
-        const payload = {
-            BusinessShortcode: shortcode,
-            LipaNaMpesaOnlineShortcodeKey: lipaNaMpesaOnlineShortcodeKey,
-            PhoneNumber: phoneNumber,
-            AccountReference: 'SANGPOINT',
-            TransactionDesc: 'Payment for quiz section',
-            Amount: amount,
-            PartyA: phoneNumber,
-            PartyB: shortcode,
-            Shortcode: shortcode,
-            LipaNaMpesaShortcodeKey: lipaNaMpesaOnlineShortcodeKey
-        };
-
-        const stkPushResponse = await axios.post('https://api.safaricom.co.ke/mpesa/stkpush/v1/processrequest', payload, {
-            headers: {
-                'Authorization': `Bearer ${accessToken}`,
-                'Content-Type': 'application/json'
-            }
-        });
-
-        if (stkPushResponse.status === 200) {
-            res.json({ success: true, message: 'Payment initiated. Please check your phone for payment confirmation.' });
-        } else {
-            res.json({ success: false, message: 'Payment initiation failed.' });
-        }
-    } catch (error) {
-        console.error('Error initiating payment:', error);
-        res.json({ success: false, message: 'Payment failed. Please try again later.' });
-    }
+    res.json({
+      success: true,
+      message: "STK Push request sent. Check your phone to complete the transaction.",
+      data: response.data,
+    });
+  } catch (error) {
+    console.error("Error initiating STK Push:", error.response.data);
+    res.status(500).json({ success: false, message: "STK Push failed.", error: error.response.data });
+  }
 });
 
-app.post('/api/payments/callback', (req, res) => {
-    const { Body } = req.body;
-    if (Body.stkCallback) {
-        const { ResultCode, ResultDesc, CallbackMetadata } = Body.stkCallback;
-        if (ResultCode === 0) {
-            console.log('Payment successful:', CallbackMetadata);
-        } else {
-            console.log('Payment failed:', ResultDesc);
-        }
-    }
-
-    res.status(200).json({ message: 'Callback received and processed' });
-});
-
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+// Start server
+app.listen(port, () => {
+  console.log(`Server running at http://localhost:${port}`);
 });
