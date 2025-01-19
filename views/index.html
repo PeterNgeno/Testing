@@ -1,76 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>STK Push Test</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-      padding: 20px;
-    }
-    form {
-      margin-bottom: 20px;
-    }
-    input, button {
-      display: block;
-      margin: 10px 0;
-      padding: 10px;
-      font-size: 16px;
-    }
-    #responseMessage {
-      margin-top: 20px;
-      font-size: 18px;
-      color: green;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Payment</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 100px;
+        }
+        input, button {
+            padding: 10px;
+            margin: 10px;
+            width: 300px;
+            font-size: 16px;
+        }
+    </style>
 </head>
 <body>
-  <h1>STK Push Test</h1>
-  <form id="stkPushForm">
-    <label for="phoneNumber">Phone Number:</label>
-    <input type="text" id="phoneNumber" placeholder="Enter phone number" required />
-
-    <label for="amount">Amount:</label>
-    <input type="number" id="amount" placeholder="Enter amount" required />
-
-    <button type="submit">Send STK Push</button>
-  </form>
-
-  <div id="responseMessage"></div>
-
-  <script>
-    document.getElementById('stkPushForm').addEventListener('submit', async function (event) {
-      event.preventDefault();
-
-      let phoneNumber = document.getElementById('phoneNumber').value;
-      const amount = document.getElementById('amount').value;
-
-      // Ensure the phone number is in the correct format
-      if (phoneNumber.startsWith("+254")) {
-        phoneNumber = phoneNumber.replace("+", "");
-      } else if (phoneNumber.startsWith("07")) {
-        phoneNumber = "254" + phoneNumber.slice(1);
-      }
-
-      try {
-        const response = await fetch('/api/stkpush', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ phoneNumber, amount }),
-        });
-
-        const data = await response.json();
-        document.getElementById('responseMessage').innerText = data.message || 'Request completed.';
-        console.log('Response:', data);
-      } catch (error) {
-        console.error('Error:', error);
-        document.getElementById('responseMessage').innerText = 'Error initiating STK Push.';
-      }
-    });
-  </script>
+    <h1>Pay to Access the Quiz</h1>
+    <form action="/pay" method="POST">
+        <input type="text" name="phoneNumber" placeholder="Enter your phone number" required>
+        <button type="submit">Pay Now</button>
+    </form>
 </body>
 </html>
