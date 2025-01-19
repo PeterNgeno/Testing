@@ -16,11 +16,17 @@ app.get('/', (req, res) => {
 app.post('/pay', async (req, res) => {
     const phoneNumber = req.body.phoneNumber;
 
-    // M-Pesa sandbox credentials
+    // Validate phone number (ensure it starts with +254)
+    if (!phoneNumber || !phoneNumber.startsWith('+254')) {
+        return res.status(400).send('Invalid phone number. Please use the format +254xxxxxxxxx.');
+    }
+
+    // M-Pesa sandbox credentials (hardcoded for testing)
     const consumerKey = 'guO0rm165Vt8gARvEG4a7GTwy0ATHc1RxG6TSLgyAsh5NeZF';
     const consumerSecret = 'xz8evol1G1OdUzHGTve4hPBIUQASJK1hMy1PdPWf4ozgAKgYRLPgtU4fAVZl47Gq';
     const shortcode = '174379';  // Default sandbox shortcode
     const passkey = 'bfb279f9aa9bdbcf158e97dd71a467cd2bdfca4d2b03e50acf54b1c3998bdb55';
+    const callbackUrl = 'https://testing-gold-two.vercel.app/mpesa/callback';  // Use the actual callback URL
 
     try {
         // Obtain access token
@@ -44,11 +50,11 @@ app.post('/pay', async (req, res) => {
                 Password: password,
                 Timestamp: timestamp,
                 TransactionType: 'CustomerPayBillOnline',
-                Amount: 1,
+                Amount: 1,  // Modify the amount as needed
                 PartyA: phoneNumber,
                 PartyB: shortcode,
                 PhoneNumber: phoneNumber,
-                CallBackURL: 'https://testing-gold-two.vercel.app/mpesa/callback',
+                CallBackURL: callbackUrl,
                 AccountReference: 'Quiz Payment',
                 TransactionDesc: 'Pay to Access Quiz',
             },
