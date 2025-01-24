@@ -107,7 +107,7 @@ app.post("/pay", generateAccessToken, async (req, res) => {
         PartyB: shortcode,
         PhoneNumber: formattedPhoneNumber,
         CallBackURL: callbackUrl,
-        AccountReference: "Quiz Payment",
+        AccountReference: "PERON TIPS LTD",
         TransactionDesc: "Pay to Access Quiz",
       },
       {
