@@ -22,25 +22,28 @@ const generateAccessToken = async (req, res, next) => {
   const consumerKey = process.env.CONSUMER_KEY;
   const consumerSecret = process.env.CONSUMER_SECRET;
 
-  const auth = Buffer.from(`${consumerKey}:${consumerSecret}`).toString("base64");
-
-  try {
-    const { data } = await axios.get(
-      "https://api.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials",
+  const auth = Buffer.from(`${consumerKey}:${consumerSecret}`).toString(
+    "base64"
+  );
+  await axios
+    .get(
+      "https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials",
       {
         headers: {
           Authorization: `Basic ${auth}`,
         },
       }
-    );
-    req.accessToken = data.access_token;
-    next();
-  } catch (error) {
-    console.error("Access Token Error:", error.message);
-    res.status(400).json({ message: "Failed to generate access token." });
-  }
+    )
+    .then((data) => {
+      // console.log(data.data.access_token);
+      req.accessToken = data.data.access_token;
+      next();
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(400).json(message);
+    });
 };
-
 app.use(generateAccessToken);
 
 app.get("/token", generateAccessToken, (req, res) => {
@@ -67,12 +70,16 @@ app.post("/pay", generateAccessToken, async (req, res) => {
       );
   }
 
+  // Proceed with the validated phone number
+  // console.log("Formatted Phone Number:", formattedPhoneNumber);
+
   const shortcode = process.env.SHORTCODE;
   const passkey = process.env.PASSKEY;
   const callbackUrl = process.env.CALLBACK_URL;
 
   try {
     const date = new Date();
+
     const timestamp =
       date.getFullYear() +
       ("0" + (date.getMonth() + 1)).slice(-2) +
@@ -81,12 +88,15 @@ app.post("/pay", generateAccessToken, async (req, res) => {
       ("0" + date.getMinutes()).slice(-2) +
       ("0" + date.getSeconds()).slice(-2);
 
+    console.log(timestamp);
+
     const password = Buffer.from(shortcode + passkey + timestamp).toString(
       "base64"
     );
 
+    // Initiate STK Push
     const stkResponse = await axios.post(
-      "https://api.safaricom.co.ke/mpesa/stkpush/v1/processrequest",
+      "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest",
       {
         BusinessShortCode: shortcode,
         Password: password,
@@ -97,7 +107,7 @@ app.post("/pay", generateAccessToken, async (req, res) => {
         PartyB: shortcode,
         PhoneNumber: formattedPhoneNumber,
         CallBackURL: callbackUrl,
-        AccountReference: "PERON TIPS LTD",
+        AccountReference: "Quiz Payment",
         TransactionDesc: "Pay to Access Quiz",
       },
       {
@@ -107,6 +117,7 @@ app.post("/pay", generateAccessToken, async (req, res) => {
       }
     );
 
+    // Return the STK Push response to the client
     res.status(200).json({
       message:
         "STK Push initiated. Please check your phone to complete the payment.",
@@ -116,27 +127,27 @@ app.post("/pay", generateAccessToken, async (req, res) => {
     console.error("STK Push error:", error.message);
     res.status(400).json({
       message: "Error initiating payment. Please try again later.",
-      error: error.response?.data || error.message,
+      error: error,
     });
   }
 });
 
-// Handle M-Pesa callback
+//Handle M-Pesa callback
 app.post("/callback", (req, res) => {
   console.log("M-Pesa Callback:", req.body);
   const callbackData = req.body;
+  if (!callbackData.Body.CallbackMetadata) {
+    console.log(callbackData.Body);
 
-  if (!callbackData.Body?.stkCallback?.CallbackMetadata) {
-    console.log("Callback Error Data:", callbackData.Body);
-    return res.status(400).send("Invalid callback data");
+    res.status(400).json("Ok");
   }
 
-  const metadata = callbackData.Body.stkCallback.CallbackMetadata.Item;
-  const phone = metadata.find((item) => item.Name === "PhoneNumber")?.Value;
-  const amount = metadata.find((item) => item.Name === "Amount")?.Value;
-  const trax_id = metadata.find((item) => item.Name === "MpesaReceiptNumber")?.Value;
+  const phone = callbackData.Body.stkCallback.CallbackMetadata.Item[4].Value;
+  const amount = callbackData.Body.stkCallback.CallbackMetadata.Item[0].Value;
+  const trax_id = callbackData.Body.stkCallback.CallbackMetadata.Item[1].Value;
 
-  console.log("Response data:", { phone, amount, trax_id });
+  console.log("My Response data", phone, amount, trax_id);
+
   res.status(200).send("Callback received");
 });
 
