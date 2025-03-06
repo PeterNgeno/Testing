@@ -2,10 +2,10 @@
   "name": "testing",
   "version": "1.0.0",
   "description": "A project for testing functionality, including STK Push.",
-  "main": "api/index.js",
+  "main": "index.js",
   "scripts": {
-    "start": "node api/index.js",
-    "dev": "nodemon api/index.js"
+    "start": "node index.js",
+    "dev": "nodemon index.js"
   },
   "keywords": ["stkpush", "node", "api", "testing"],
   "author": "Peter Ngeno",
