@@ -7,7 +7,7 @@
     "start": "node index.js",
     "dev": "nodemon index.js"
   },
-  "keywords": ["stkpush", "node", "api", "testing"],
+  "keywords": ["stkpush", "node", "index.js", "testing"],
   "author": "Peter Ngeno",
   "license": "ISC",
   "dependencies": {
