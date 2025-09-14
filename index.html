@@ -1,140 +1,33 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>MWAHE ALTAR Banner</title>
+  <meta charset="UTF-8">
+  <title>AI Image Enhancer</title>
   <style>
-    body {
-      margin: 0;
-      padding: 0;
-    }
-
-    /* Banner container */
-    .banner {
-      width: 100%;
-      aspect-ratio: 16 / 9; /* Maintain 16:9 ratio */
-      background: linear-gradient(135deg, darkblue, darkred);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between; /* leave space for bottom bar */
-      box-sizing: border-box;
-    }
-
-    /* Content area split into left & right */
-    .content {
-      flex: 1;
-      display: flex;
-      padding: 20px;
-      box-sizing: border-box;
-    }
-
-    .left-side {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      /* Placeholder for speaker image */
-      border: 2px dashed rgba(255,255,255,0.3);
-      color: rgba(255,255,255,0.5);
-      font-size: 20px;
-      font-family: Arial, sans-serif;
-    }
-
-    .right-side {
-      flex: 1;
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-
-    /* MWAHE */
-    .main-title {
-      font-family: "Rogbold-3IIGM", sans-serif;
-      font-size: 100px;
-      font-weight: bold;
-      color: white;
-      margin: 5px;
-      text-shadow: 4px 4px 10px rgba(0,0,0,0.8);
-    }
-
-    /* ALTAR */
-    .sub-title {
-      font-family: "Rogbold-3IIGM", sans-serif;
-      font-size: 47px;
-      font-weight: bold;
-      color: goldenrod;
-      margin: 5px;
-      text-shadow: 3px 3px 8px rgba(0,0,0,0.7);
-    }
-
-    /* Welcomes you to */
-    .tagline {
-      font-family: "Arial", sans-serif;
-      font-size: 30px;
-      color: white;
-      margin: 5px;
-      text-shadow: 2px 2px 6px rgba(0,0,0,0.6);
-    }
-
-    /* Gold style for SUNDAY + SERVICE */
-    .gold-text {
-      font-family: "Rogbold-3IIGM", sans-serif;
-      font-size: 120px;
-      font-weight: 900;
-      background: linear-gradient(90deg, #FFD700, #FFA500, #FFD700, #FFFACD);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin: 10px 0;
-      text-shadow: 3px 3px 12px rgba(0,0,0,0.7);
-      letter-spacing: 3px;
-    }
-
-    /* Info bar at bottom */
-    .info-bar {
-      width: 100%;
-      background: white;
-      color: black;
-      font-family: Arial, sans-serif;
-      font-size: 22px;
-      font-weight: bold;
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      padding: 10px 0;
-      box-sizing: border-box;
-    }
-
-    .info-item {
-      margin: 0 10px;
-    }
+    body { font-family: Arial, sans-serif; text-align: center; padding: 40px; }
+    .preview, .result { margin-top: 20px; }
+    img { max-width: 100%; border: 1px solid #ddd; border-radius: 8px; }
+    button { padding: 10px 20px; margin-top: 15px; cursor: pointer; }
   </style>
 </head>
 <body>
-  <div class="banner">
-    <div class="content">
-      <!-- Left side reserved for speaker photo -->
-      <div class="left-side">
-        Speaker Image Here
-      </div>
-
-      <!-- Right side text -->
-      <div class="right-side">
-        <div class="main-title">MWAHE</div>
-        <div class="sub-title">ALTAR</div>
-        <div class="tagline">Welcomes you to:</div>
-        <div class="gold-text">SUNDAY</div>
-        <div class="gold-text">SERVICE</div>
-      </div>
-    </div>
-
-    <!-- Info bar -->
-    <div class="info-bar">
-      <div class="info-item">📍 Location: Nairobi</div>
-      <div class="info-item">⏰ Time: 10:00 AM</div>
-      <div class="info-item">☎ Contacts: 0796 029 616</div>
-    </div>
+  <h1>AI Image Enhancer</h1>
+  <input type="file" id="upload" accept="image/*"><br>
+  
+  <div class="preview">
+    <h3>Uploaded Image:</h3>
+    <img id="uploadedImg" style="display:none;">
   </div>
+
+  <button id="enhanceBtn" style="display:none;">Enhance Image</button>
+
+  <div class="result">
+    <h3>Enhanced Image:</h3>
+    <img id="enhancedImg" style="display:none;">
+    <br>
+    <a id="downloadLink" style="display:none;" download="enhanced.png">Download Enhanced</a>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
