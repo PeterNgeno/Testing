@@ -1,30 +1,57 @@
+<!doctype html>
 <html>
 <head>
-  <title>KIPSANG</title>
+  <meta charset="utf-8">
+  <title>MWAHE ALTAR Banner</title>
   <style>
-    h1 {
-      color: white;
-      background-color: black;
-      font-family: "Rogbold-3IIGM", serif;
-      font-weight: bolder;
-      font-size: 200px;
-      text-align:center;
+    /* Banner container */
+    .banner {
+      width: 100%;
+      height: 300px; /* Adjust height as you like */
+      background: black; /* Banner background color */
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
     }
-    p {
-      color: black;
-      background-color: white;
-      font-family: "Rogbold-3IIGM", serif;
-      font-weight: normal;
+
+    /* MWAHE (main title) */
+    .banner .main-title {
+      font-family: "Rogbold-3IIGM", sans-serif;
+      font-size: 156px;
+      font-weight: bold;
+      color: white;
+      margin: 5px;
+      text-shadow: 3px 3px 8px rgba(0,0,0,0.7); /* Adds depth */
+    }
+
+    /* ALTAR (sub-title) */
+    .banner .sub-title {
+      font-family: "Rogbold-3IIGM", sans-serif;
+      font-size: 47px;
+      font-weight: bold;
+      color: goldenrod; /* Golden yellow */
+      margin: 5px;
+      text-shadow: 2px 2px 6px rgba(0,0,0,0.6);
+    }
+
+    /* Welcomes you to: (tagline) */
+    .banner .tagline {
+      font-family: "Arial", sans-serif;
       font-size: 30px;
+      font-weight: normal;
+      color: white;
+      margin: 5px;
+      text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
     }
   </style>
 </head>
-
 <body>
-  <h1>KIPSANG</h1>
-  <p>
-    The founder of Tv Radio and PERON TIPS platform.<br>
-    Check below for more information.
-  </p>
+  <div class="banner">
+    <div class="main-title">MWAHE</div>
+    <div class="sub-title">ALTAR</div>
+    <div class="tagline">Welcomes you to:</div>
+  </div>
 </body>
 </html>
