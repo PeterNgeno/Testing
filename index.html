@@ -1,100 +1,93 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>MWAHE ALTAR Banner</title>
+  <meta charset="UTF-8">
+  <title>MWAHE Banner</title>
   <style>
-    /* Banner container */
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(to bottom right, darkblue, darkred);
+    }
+
     .banner {
       width: 100%;
-      aspect-ratio: 16 / 9; /* Maintain 16:9 ratio */
-      background: linear-gradient(135deg, darkblue, darkred);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between; /* leave space for bottom bar */
-      align-items: center;
+      max-width: 1600px;
+      aspect-ratio: 16 / 9;
+      background: linear-gradient(to bottom right, darkblue, darkred);
+      color: white;
       text-align: center;
-      padding-top: 20px;
-      box-sizing: border-box;
+      position: relative;
+      overflow: hidden;
     }
 
-    /* MWAHE */
-    .banner .main-title {
+    .title {
+      font-size: 100px;
+      font-weight: bold;
+      color: white;
+      margin-top: 30px;
       font-family: "Rogbold-3IIGM", sans-serif;
+    }
+
+    .subtitle {
+      font-size: 40px;
+      margin-top: 10px;
+      font-family: "Rogbold-3IIGM", sans-serif;
+    }
+
+    .gold {
       font-size: 120px;
-      font-weight: bold;
-      color: white;
-      margin: 5px;
-      text-shadow: 4px 4px 10px rgba(0,0,0,0.8);
-    }
-
-    /* ALTAR */
-    .banner .sub-title {
-      font-family: "Rogbold-3IIGM", sans-serif;
-      font-size: 47px;
-      font-weight: bold;
-      color: goldenrod;
-      margin: 5px;
-      text-shadow: 3px 3px 8px rgba(0,0,0,0.7);
-    }
-
-    /* Welcomes you to */
-    .banner .tagline {
-      font-family: "Arial", sans-serif;
-      font-size: 30px;
-      color: white;
-      margin: 5px;
-      text-shadow: 2px 2px 6px rgba(0,0,0,0.6);
-    }
-
-    /* Gold style for SUNDAY + SERVICE */
-    .banner .gold-text {
-      font-family: "Rogbold-3IIGM", sans-serif;
-      font-size: 140px;
-      font-weight: 900;
-      background: linear-gradient(90deg, #FFD700, #FFA500, #FFD700, #FFFACD);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      font-weight: bolder;
+      color: gold;
       margin: 10px 0;
-      text-shadow: 3px 3px 12px rgba(0,0,0,0.7);
-      letter-spacing: 3px;
+      font-family: "Rogbold-3IIGM", sans-serif;
+      text-shadow: 2px 2px 8px rgba(255, 215, 0, 0.8);
     }
 
-    /* Info bar at bottom */
-    .info-bar {
+    .bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
       width: 100%;
-      background: white;
-      color: black;
-      font-family: Arial, sans-serif;
-      font-size: 22px;
-      font-weight: bold;
+      height: 120px;
+      background-color: white;
       display: flex;
-      justify-content: space-around;
       align-items: center;
-      padding: 10px 0;
-      box-sizing: border-box;
+      justify-content: space-between;
+      padding: 0 40px;
     }
 
-    .info-item {
-      margin: 0 10px;
+    .bar img {
+      height: 100px; /* doubled from 50px */
+      width: auto;
+    }
+
+    .bar-info {
+      color: black;
+      font-size: 28px;
+      font-family: Arial, sans-serif;
+      text-align: right;
     }
   </style>
 </head>
 <body>
   <div class="banner">
-    <div>
-      <div class="main-title">MWAHE</div>
-      <div class="sub-title">ALTAR</div>
-      <div class="tagline">Welcomes you to:</div>
-      <div class="gold-text">SUNDAY</div>
-      <div class="gold-text">SERVICE</div>
-    </div>
-    
-    <!-- Info bar -->
-    <div class="info-bar">
-      <div class="info-item">📍 Location: Nairobi</div>
-      <div class="info-item">⏰ Time: 10:00 AM</div>
-      <div class="info-item">☎ Contacts: 0796 029 616</div>
+    <div class="title">MWAHE</div>
+    <div class="subtitle">Welcomes you to:</div>
+    <div class="gold">SUNDAY</div>
+    <div class="gold">SERVICE</div>
+
+    <div class="bar">
+      <img src="your-logo.png" alt="Logo"> <!-- Replace with your logo path -->
+      <div class="bar-info">
+        Location: Nairobi, Kenya<br>
+        Time: 10:00 AM<br>
+        Contacts: +254 796 029 616
+      </div>
     </div>
   </div>
 </body>
