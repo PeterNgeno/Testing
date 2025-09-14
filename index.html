@@ -7,20 +7,20 @@
     /* Banner container */
     .banner {
       width: 100%;
-      aspect-ratio: 16 / 9; /* 16:9 ratio */
-      background: linear-gradient(135deg, darkblue, darkred); /* Gradient background */
+      aspect-ratio: 16 / 9; /* Keep 16:9 ratio */
+      background: linear-gradient(135deg, darkblue, darkred); /* Dark blue to red gradient */
       display: flex;
       flex-direction: column;
-      justify-content: flex-start; /* push content to top */
+      justify-content: flex-start; /* push content from top */
       align-items: center;
       text-align: center;
-      padding-top: 20px; /* space from very top */
+      padding-top: 20px;
     }
 
-    /* MWAHE (main title at top) */
+    /* MWAHE (top) */
     .banner .main-title {
       font-family: "Rogbold-3IIGM", sans-serif;
-      font-size: 156px;
+      font-size: 120px;  /* slightly smaller so Sunday/Service dominate */
       font-weight: bold;
       color: white;
       margin: 5px;
@@ -47,16 +47,17 @@
       text-shadow: 2px 2px 6px rgba(0,0,0,0.6);
     }
 
-    /* SUNDAY with gold metallic gradient */
-    .banner .sunday {
+    /* Shared metallic gold style (for SUNDAY + SERVICE) */
+    .banner .gold-text {
       font-family: "Rogbold-3IIGM", sans-serif;
-      font-size: 70px;
-      font-weight: bold;
-      background: linear-gradient(90deg, #FFD700, #FFA500, #FFD700, #FFFACD); /* gold metallic effect */
+      font-size: 140px;  /* bigger than MWAHE */
+      font-weight: 900;  /* extra bold */
+      background: linear-gradient(90deg, #FFD700, #FFA500, #FFD700, #FFFACD); /* gold metallic */
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       margin: 10px 0 0 0;
-      text-shadow: 2px 2px 8px rgba(0,0,0,0.6);
+      text-shadow: 3px 3px 12px rgba(0,0,0,0.7);
+      letter-spacing: 3px; /* spread letters slightly */
     }
   </style>
 </head>
@@ -65,7 +66,8 @@
     <div class="main-title">MWAHE</div>
     <div class="sub-title">ALTAR</div>
     <div class="tagline">Welcomes you to:</div>
-    <div class="sunday">SUNDAY</div>
+    <div class="gold-text">SUNDAY</div>
+    <div class="gold-text">SERVICE</div>
   </div>
 </body>
 </html>
