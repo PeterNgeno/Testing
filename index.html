@@ -4,6 +4,11 @@
   <meta charset="utf-8">
   <title>MWAHE ALTAR Banner</title>
   <style>
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
     /* Banner container */
     .banner {
       width: 100%;
@@ -12,16 +17,42 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between; /* leave space for bottom bar */
-      align-items: center;
-      text-align: center;
-      padding-top: 20px;
       box-sizing: border-box;
     }
 
+    /* Content area split into left & right */
+    .content {
+      flex: 1;
+      display: flex;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    .left-side {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      /* Placeholder for speaker image */
+      border: 2px dashed rgba(255,255,255,0.3);
+      color: rgba(255,255,255,0.5);
+      font-size: 20px;
+      font-family: Arial, sans-serif;
+    }
+
+    .right-side {
+      flex: 1;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
     /* MWAHE */
-    .banner .main-title {
+    .main-title {
       font-family: "Rogbold-3IIGM", sans-serif;
-      font-size: 120px;
+      font-size: 100px;
       font-weight: bold;
       color: white;
       margin: 5px;
@@ -29,7 +60,7 @@
     }
 
     /* ALTAR */
-    .banner .sub-title {
+    .sub-title {
       font-family: "Rogbold-3IIGM", sans-serif;
       font-size: 47px;
       font-weight: bold;
@@ -39,7 +70,7 @@
     }
 
     /* Welcomes you to */
-    .banner .tagline {
+    .tagline {
       font-family: "Arial", sans-serif;
       font-size: 30px;
       color: white;
@@ -48,9 +79,9 @@
     }
 
     /* Gold style for SUNDAY + SERVICE */
-    .banner .gold-text {
+    .gold-text {
       font-family: "Rogbold-3IIGM", sans-serif;
-      font-size: 140px;
+      font-size: 120px;
       font-weight: 900;
       background: linear-gradient(90deg, #FFD700, #FFA500, #FFD700, #FFFACD);
       -webkit-background-clip: text;
@@ -82,14 +113,22 @@
 </head>
 <body>
   <div class="banner">
-    <div>
-      <div class="main-title">MWAHE</div>
-      <div class="sub-title">ALTAR</div>
-      <div class="tagline">Welcomes you to:</div>
-      <div class="gold-text">SUNDAY</div>
-      <div class="gold-text">SERVICE</div>
+    <div class="content">
+      <!-- Left side reserved for speaker photo -->
+      <div class="left-side">
+        Speaker Image Here
+      </div>
+
+      <!-- Right side text -->
+      <div class="right-side">
+        <div class="main-title">MWAHE</div>
+        <div class="sub-title">ALTAR</div>
+        <div class="tagline">Welcomes you to:</div>
+        <div class="gold-text">SUNDAY</div>
+        <div class="gold-text">SERVICE</div>
+      </div>
     </div>
-    
+
     <!-- Info bar -->
     <div class="info-bar">
       <div class="info-item">📍 Location: Nairobi</div>
