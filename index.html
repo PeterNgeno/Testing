@@ -7,20 +7,21 @@
     /* Banner container */
     .banner {
       width: 100%;
-      aspect-ratio: 16 / 9; /* Keep 16:9 ratio */
-      background: linear-gradient(135deg, darkblue, darkred); /* Dark blue to red gradient */
+      aspect-ratio: 16 / 9; /* Maintain 16:9 ratio */
+      background: linear-gradient(135deg, darkblue, darkred);
       display: flex;
       flex-direction: column;
-      justify-content: flex-start; /* push content from top */
+      justify-content: space-between; /* leave space for bottom bar */
       align-items: center;
       text-align: center;
       padding-top: 20px;
+      box-sizing: border-box;
     }
 
-    /* MWAHE (top) */
+    /* MWAHE */
     .banner .main-title {
       font-family: "Rogbold-3IIGM", sans-serif;
-      font-size: 120px;  /* slightly smaller so Sunday/Service dominate */
+      font-size: 120px;
       font-weight: bold;
       color: white;
       margin: 5px;
@@ -37,37 +38,64 @@
       text-shadow: 3px 3px 8px rgba(0,0,0,0.7);
     }
 
-    /* Welcomes you to: */
+    /* Welcomes you to */
     .banner .tagline {
       font-family: "Arial", sans-serif;
       font-size: 30px;
-      font-weight: normal;
       color: white;
       margin: 5px;
       text-shadow: 2px 2px 6px rgba(0,0,0,0.6);
     }
 
-    /* Shared metallic gold style (for SUNDAY + SERVICE) */
+    /* Gold style for SUNDAY + SERVICE */
     .banner .gold-text {
       font-family: "Rogbold-3IIGM", sans-serif;
-      font-size: 140px;  /* bigger than MWAHE */
-      font-weight: 900;  /* extra bold */
-      background: linear-gradient(90deg, #FFD700, #FFA500, #FFD700, #FFFACD); /* gold metallic */
+      font-size: 140px;
+      font-weight: 900;
+      background: linear-gradient(90deg, #FFD700, #FFA500, #FFD700, #FFFACD);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      margin: 10px 0 0 0;
+      margin: 10px 0;
       text-shadow: 3px 3px 12px rgba(0,0,0,0.7);
-      letter-spacing: 3px; /* spread letters slightly */
+      letter-spacing: 3px;
+    }
+
+    /* Info bar at bottom */
+    .info-bar {
+      width: 100%;
+      background: white;
+      color: black;
+      font-family: Arial, sans-serif;
+      font-size: 22px;
+      font-weight: bold;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 10px 0;
+      box-sizing: border-box;
+    }
+
+    .info-item {
+      margin: 0 10px;
     }
   </style>
 </head>
 <body>
   <div class="banner">
-    <div class="main-title">MWAHE</div>
-    <div class="sub-title">ALTAR</div>
-    <div class="tagline">Welcomes you to:</div>
-    <div class="gold-text">SUNDAY</div>
-    <div class="gold-text">SERVICE</div>
+    <div>
+      <div class="main-title">MWAHE</div>
+      <div class="sub-title">ALTAR</div>
+      <div class="tagline">Welcomes you to:</div>
+      <div class="gold-text">SUNDAY</div>
+      <div class="gold-text">SERVICE</div>
+    </div>
+    
+    <!-- Info bar -->
+    <div class="info-bar">
+      <div class="info-item">📍 Location: Nairobi</div>
+      <div class="info-item">⏰ Time: 10:00 AM</div>
+      <div class="info-item">☎ Contacts: 0796 029 616</div>
+    </div>
   </div>
 </body>
 </html>
