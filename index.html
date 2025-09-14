@@ -7,16 +7,17 @@
     /* Banner container */
     .banner {
       width: 100%;
-      aspect-ratio: 16 / 9; /* Maintain 16:9 ratio */
+      aspect-ratio: 16 / 9; /* 16:9 ratio */
       background: linear-gradient(135deg, darkblue, darkred); /* Gradient background */
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      justify-content: flex-start; /* push content to top */
       align-items: center;
       text-align: center;
+      padding-top: 20px; /* space from very top */
     }
 
-    /* MWAHE (main title) */
+    /* MWAHE (main title at top) */
     .banner .main-title {
       font-family: "Rogbold-3IIGM", sans-serif;
       font-size: 156px;
@@ -26,7 +27,7 @@
       text-shadow: 4px 4px 10px rgba(0,0,0,0.8);
     }
 
-    /* ALTAR (sub-title) */
+    /* ALTAR */
     .banner .sub-title {
       font-family: "Rogbold-3IIGM", sans-serif;
       font-size: 47px;
@@ -36,7 +37,7 @@
       text-shadow: 3px 3px 8px rgba(0,0,0,0.7);
     }
 
-    /* Welcomes you to: (tagline) */
+    /* Welcomes you to: */
     .banner .tagline {
       font-family: "Arial", sans-serif;
       font-size: 30px;
@@ -45,6 +46,18 @@
       margin: 5px;
       text-shadow: 2px 2px 6px rgba(0,0,0,0.6);
     }
+
+    /* SUNDAY with gold metallic gradient */
+    .banner .sunday {
+      font-family: "Rogbold-3IIGM", sans-serif;
+      font-size: 70px;
+      font-weight: bold;
+      background: linear-gradient(90deg, #FFD700, #FFA500, #FFD700, #FFFACD); /* gold metallic effect */
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin: 10px 0 0 0;
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.6);
+    }
   </style>
 </head>
 <body>
@@ -52,6 +65,7 @@
     <div class="main-title">MWAHE</div>
     <div class="sub-title">ALTAR</div>
     <div class="tagline">Welcomes you to:</div>
+    <div class="sunday">SUNDAY</div>
   </div>
 </body>
 </html>
